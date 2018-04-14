@@ -1,4 +1,16 @@
 <resources>
     <string name="app_name">Event Args</string>
     <string name="action_settings">Settings</string>
+    <string name="desc">EventArgs is a simple application that brings together all the features that is required for a smooth, efficient and time saving way to organise, plan and execute an event. It gives information about all the way you can productively get your event started !</string>
+
+    <string-array name="Types">
+        <item>Type 1</item>
+        <item>Type 2</item>
+        <item>Type 3</item>
+        <item>Type 4</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

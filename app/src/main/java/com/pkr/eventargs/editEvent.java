@@ -32,6 +32,9 @@ public class editEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_event);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         pLayout = findViewById(R.id.pull_layout);
         pLayout.setRefreshStyle(PullRefreshLayout.STYLE_RING);
         pLayout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
@@ -59,12 +62,16 @@ public class editEvent extends AppCompatActivity {
         SQLiteDatabase db = mHelper.getReadableDatabase();
 
         Cursor cursor = db.query(EventContract.EventEntry.TABLE,
-                new String[]{EventContract.EventEntry._ID, EventContract.EventEntry.COL_EVENT_TITLE},
+                new String[]{EventContract.EventEntry._ID, EventContract.EventEntry.COL_EVENT_TITLE, EventContract.EventEntry.COL_DATE},
                 null, null, null, null, null);
         while (cursor.moveToNext()) {
             int idx = cursor.getColumnIndex(EventContract.EventEntry.COL_EVENT_TITLE);
-            list.add(cursor.getString(idx));
+            int idx1 = cursor.getColumnIndex(EventContract.EventEntry.COL_DATE);
+            String temp = cursor.getString(idx) + "-" + cursor.getString(idx1);
+            list.add(temp);
         }
+        cursor.close();
+        db.close();
 
         //logging the contents of the database
         for (int i=0; i<list.size(); i++)
@@ -83,14 +90,22 @@ public class editEvent extends AppCompatActivity {
     public void deleteEvent(View v){
         View parent = (View) v.getParent();
         TextView eventTitle = parent.findViewById(R.id.event_title);
-        String event = String.valueOf(eventTitle.getText());
+        String comp = String.valueOf(eventTitle.getText());
 
-        Log.e(TAG, "Deleting Event : " + event);
+        String[] block = comp.split("-");
+        Log.e(TAG, "Deleting Event : " + block[0] + "......" + block[1]);
+        String event = block[0];
+        String date = block[1];
 
         SQLiteDatabase db = mHelper.getWritableDatabase();
         db.delete(EventContract.EventEntry.TABLE,
-                EventContract.EventEntry.COL_EVENT_TITLE + " = ?",
-                new String[]{event});
+                EventContract.EventEntry.COL_EVENT_TITLE + " = ? AND " + EventContract.EventEntry.COL_DATE + " = ?",
+                new String[]{event,date});
         updateUI();
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

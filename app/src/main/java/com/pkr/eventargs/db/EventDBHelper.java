@@ -18,11 +18,12 @@ public class EventDBHelper extends SQLiteOpenHelper {
 
         String createTable = "CREATE TABLE " + EventContract.EventEntry.TABLE + " ( " +
                 EventContract.EventEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                EventContract.EventEntry.COL_EVENT_TITLE + " TEXT NOT NULL);";
-        String insertTable = "INSERT INTO " + EventContract.EventEntry.TABLE + " (" + EventContract.EventEntry.COL_EVENT_TITLE + ") VALUES\n" +
-                "('lalalallalal')," +
-                "('blah')," +
-                "('yooo');";
+                EventContract.EventEntry.COL_EVENT_TITLE + " TEXT NOT NULL, " +
+                EventContract.EventEntry.COL_DATE + " TEXT NOT NULL);";
+        String insertTable = "INSERT INTO " + EventContract.EventEntry.TABLE + " (" + EventContract.EventEntry.COL_EVENT_TITLE + ", " + EventContract.EventEntry.COL_DATE + ") VALUES\n" +
+                "('lalalallalal','(27/01/18)')," +
+                "('blah','(27/01/18)')," +
+                "('yooo','(27/01/18)');";
 
         db.execSQL(createTable);
         db.execSQL(insertTable);

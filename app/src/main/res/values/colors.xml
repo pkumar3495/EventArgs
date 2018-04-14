@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#66bb6a</color>
-    <color name="colorPrimaryDark">#66bb6a</color>
-    <color name="colorAccent">#d50000</color>
+    <color name="colorPrimary">#1A2980</color>
+    <color name="colorPrimaryDark">#1A2980</color>
+    <color name="colorAccent">#1e88e5</color>
+    <color name="listBackground">#dcffffff</color>
+    <color name="listBackgroundDefault">#00000000</color>
+    <color name="locationEntered">#09a129</color>
 </resources>
