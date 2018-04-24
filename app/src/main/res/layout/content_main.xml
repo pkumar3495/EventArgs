@@ -97,14 +97,17 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/rounded_edittext"
+                android:background="@drawable/edit_text_back_front_page"
                 android:elevation="10dp"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:maxLines="1"
+                android:inputType="text"
+                android:hint="say something..."/>
 
             <ImageView
                 android:id="@+id/search_But"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="40dp"
                 android:layout_marginBottom="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="10dp"
@@ -139,7 +142,8 @@
             android:layout_margin="64dp"
             android:elevation="10dp"
             app:cardCornerRadius="10dp"
-            app:cardElevation="10dp">
+            app:cardElevation="10dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"

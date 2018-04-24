@@ -45,10 +45,10 @@
         </LinearLayout>
 
         <CheckBox
-            android:id="@+id/shop_check"
+            android:id="@+id/ev_check"
             android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:textSize="1dp" />
+            android:textSize="1dp"/>
 
     </LinearLayout>
 

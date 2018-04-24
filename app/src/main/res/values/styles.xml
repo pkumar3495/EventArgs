@@ -24,4 +24,22 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="mytoast">
+        <item name="textBold">true</item>
+        <item name="textColor">#fff</item>
+        <item name="font">@font/product_sans_regular</item>
+        <item name="textSize">14sp</item>
+        <item name="colorBackground">#09a129</item>
+        <item name="solidBackground">true</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">#fff</item>
+        <!--<item name="iconStart">@drawable/ic</item>-->
+        <!--<item name="iconEnd">@drawable/ic</item>-->
+        <item name="length">LONG</item>
+        LONG or SHORT
+        <item name="gravity">top</item>
+        top or center
+        <item name="radius">5dp</item>
+    </style>
+
 </resources>

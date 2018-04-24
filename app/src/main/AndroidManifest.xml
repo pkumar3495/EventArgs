@@ -28,16 +28,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".editEvent"
-            android:label="Events" />
-        <activity android:name=".innerCategory" />
-        <activity
             android:name=".about"
             android:label="About" />
         <activity
             android:name=".listOfItemsInTemplate"
             android:theme="@style/AppThemeNOActionBarCustom" />
-        <activity android:name=".Map"></activity>
+        <activity
+            android:name=".MyEvents"
+            android:label="@string/title_activity_my_events"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

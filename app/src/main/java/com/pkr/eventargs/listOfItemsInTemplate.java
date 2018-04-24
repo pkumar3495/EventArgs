@@ -1,70 +1,59 @@
 package com.pkr.eventargs;
 
-import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
-import com.google.android.gms.maps.model.LatLng;
+import com.muddzdev.styleabletoastlibrary.StyleableToast;
+import com.pkr.eventargs.db.EventContract;
+import com.pkr.eventargs.db.EventDBHelper;
 
-import java.io.IOException;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.Calendar;
 
-public class listOfItemsInTemplate extends AppCompatActivity {
+public class listOfItemsInTemplate extends AppCompatActivity implements DateRangePickerFragment.OnDateRangeSelectedListener {
 
     Button proceed_but, add_but;
-    EditText dialog_add_text;
+    EditText dialog_add_text, EventName;
 
     Dialog myDialog;
     Dialog locationDialog;
-    TextView locationText;
-    ImageView locationImage, locationDetectImage;
+    TextView locationText, startDate, startTime;
+    ImageView locationImage, locationDetectImage, optionsCreateCancel, optionCreateAdd;
     String address;
     double latitude, longitude;
     int[] shopImage = {R.drawable.sample, R.drawable.sample, R.drawable.sample, R.drawable.sample};
     ArrayList<String> itemsShop = new ArrayList<>(Arrays.asList("Shop1", "shop2", "Shop3", "Shop4"));
     ArrayList<String> itemsEventHandlers = new ArrayList<>(Arrays.asList("EV1", "EV2", "EV3", "EV4"));
     ArrayList<String> items = new ArrayList<>(Arrays.asList("item1", "item2", "item3", "item4"));
+    Boolean selectionStarted = false;
 
     LinearLayout recyclerContainer;
+    static LinearLayout checkedLayout;
+    static LinearLayout fullContentLayout;
+    EventDBHelper mHelper;
+
+    String sday, smonth, syear, eday, emonth, eyear;
 
     private static final int PERMISSION_ACCESS_COARSE_LOCATION = 1;
     LocationManager locationManager;
@@ -76,13 +65,29 @@ public class listOfItemsInTemplate extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManagerEventHandler;
     RecyclerView.LayoutManager layoutManagerItem;
     TemplateRecyclerViewAdapter recyclerViewAdapterShop;
-    TemplateRecyclerViewAdapter recyclerViewAdapterEventHandler;
+    TemplateRecyclerViewAdapterEv recyclerViewAdapterEventHandler;
     RecyclerViewItemWiseAdapter recyclerViewAdapterItem;
+
+    static int countOfChecked = 0;
+
+    static Context context;
+
+    Dialog dialog;
+
+    Calendar myCalendar = Calendar.getInstance();
+    DatePickerDialog.OnDateSetListener date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_of_items_in_template);
+
+        mHelper = new EventDBHelper(this);
+
+        context = getApplicationContext();
+
+        checkedLayout = findViewById(R.id.checked_layout);
+        fullContentLayout = findViewById(R.id.full_content_layout);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -102,38 +107,8 @@ public class listOfItemsInTemplate extends AppCompatActivity {
 //        itemsToBuyListView.setAdapter(itemsAdapter);
 
         myDialog = new Dialog(this);
+        dialog = new Dialog(this);
         locationDialog = new Dialog(this);
-
-//        add_but.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                myDialog.setContentView(R.layout.add_dialog);
-//                dialog_add_text = myDialog.findViewById(R.id.add_item_edit_text);
-//                myDialog.setCancelable(false);
-////                myDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                myDialog.show();
-//            }
-//        });
-
-//        SwipeDismissListViewTouchListener touchListener =
-//                new SwipeDismissListViewTouchListener(
-//                        itemsToBuyListView,
-//                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
-//                            @Override
-//                            public boolean canDismiss(int position) {
-//                                return true;
-//                            }
-//
-//                            @Override
-//                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-//                                for (int position : reverseSortedPositions) {
-//
-//                                    items.remove(position);
-//                                }
-//
-//                            }
-//                        });
-//        itemsToBuyListView.setOnTouchListener(touchListener);
 
         runAnimationShop(recyclerViewShop, 0);
         runAnimationEventHandler(recyclerViewEventHandler, 0);
@@ -166,7 +141,7 @@ public class listOfItemsInTemplate extends AppCompatActivity {
 
         layoutManagerEventHandler = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManagerEventHandler);
-        recyclerViewAdapterEventHandler = new TemplateRecyclerViewAdapter(this, itemsEventHandlers, shopImage);
+        recyclerViewAdapterEventHandler = new TemplateRecyclerViewAdapterEv(this, itemsEventHandlers, shopImage);
         recyclerView.setAdapter(recyclerViewAdapterEventHandler);
 
         recyclerView.setLayoutAnimation(controller);
@@ -189,21 +164,22 @@ public class listOfItemsInTemplate extends AppCompatActivity {
         recyclerView.getAdapter().notifyDataSetChanged();
         recyclerView.scheduleLayoutAnimation();
 
-        recyclerContainer.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, convertDpToPixels(150) * items.size()));
+        recyclerContainer.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (convertDpToPixels(180) * items.size()) + convertDpToPixels(50)));
     }
 
-    public static int convertDpToPixels(float dp){
+    public static int convertDpToPixels(float dp) {
         DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
         float px = dp * (metrics.densityDpi / 160f);
-        Log.e("Results", "px : " + px );
+        Log.e("Results", "px : " + px);
         return Math.round(px);
     }
 
-    public void dialogCancel(View view){
+    public void dialogCancel(View view) {
         Log.e("dialog", "Cancel clicked !");
         myDialog.dismiss();
     }
-    public void dialogAdd(View view){
+
+    public void dialogAdd(View view) {
         Log.e("dialog", "Add clicked !");
 //        items.add(dialog_add_text.getText().toString());
 //        itemsAdapter.notifyDataSetChanged();
@@ -211,22 +187,120 @@ public class listOfItemsInTemplate extends AppCompatActivity {
         myDialog.dismiss();
     }
 
-    public void locationDialogOK(View view){
+    public void locationDialogOK(View view) {
         locationDialog.dismiss();
     }
 
-    public void location(View view){
-        try {
-            Intent intent =
-                    new PlaceAutocomplete
-                            .IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                            .build(this);
-            startActivityForResult(intent, 1);
-        } catch (GooglePlayServicesRepairableException e) {
-            // TODO: Handle the error.
-        } catch (GooglePlayServicesNotAvailableException e) {
-            // TODO: Handle the error.
+//    public void location(View view){
+//        try {
+//            Intent intent =
+//                    new PlaceAutocomplete
+//                            .IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+//                            .build(this);
+//            startActivityForResult(intent, 1);
+//        } catch (GooglePlayServicesRepairableException e) {
+//            // TODO: Handle the error.
+//        } catch (GooglePlayServicesNotAvailableException e) {
+//            // TODO: Handle the error.
+//        }
+//    }
+
+    public static void optionsTopBar(int count) {
+//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        if (count != 0) {
+            checkedLayout.setVisibility(View.VISIBLE);
+            checkedLayout.setAnimation(AnimationUtils.loadAnimation(context, R.anim.show_options));
+//            layoutParams.setMargins(0, 0, 0, 50);
+        } else {
+            checkedLayout.setVisibility(View.GONE);
+            checkedLayout.setAnimation(AnimationUtils.loadAnimation(context, R.anim.hide_options));
+//            layoutParams.setMargins(0, 0, 0, 0);
         }
+//        fullContentLayout.setLayoutParams(layoutParams);
+    }
+
+
+    public void optionsClick(View view) {
+        switch (view.getId()) {
+            case R.id.create_new_event:
+                dialog.setContentView(R.layout.create_new_event_dialog);
+                EventName = dialog.findViewById(R.id.event_name_in_dialog);
+                startDate = dialog.findViewById(R.id.start_date);
+                startTime = dialog.findViewById(R.id.tvSelectedTimeRangeFragment);
+                dialog.setCancelable(true);
+                dialog.show();
+                TextView add = dialog.findViewById(R.id.create_option_add_but);
+                TextView cancel = dialog.findViewById(R.id.create_option_cancel_but);
+                add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (!EventName.getText().toString().equals("") && !startDate.getText().toString().equals("Select date") && !startTime.getText().toString().equals("Select time")) {
+//                        Toast.makeText(getApplicationContext(), EventName.getText().toString() + " is added !", Toast.LENGTH_SHORT).show();
+                            StyleableToast.makeText(listOfItemsInTemplate.this, EventName.getText().toString() + " is added to My events !", R.style.mytoast).show();
+                            SQLiteDatabase db = mHelper.getWritableDatabase();
+                            ContentValues values = new ContentValues();
+                            values.put(EventContract.EventEntry.COL_EVENT_TITLE, EventName.getText().toString());
+                            values.put(EventContract.EventEntry.COL_S_DAY, sday);
+                            values.put(EventContract.EventEntry.COL_S_MONTH, smonth);
+                            values.put(EventContract.EventEntry.COL_S_YEAR, syear);
+                            values.put(EventContract.EventEntry.COL_E_DAY, eday);
+                            values.put(EventContract.EventEntry.COL_E_MONTH, emonth);
+                            values.put(EventContract.EventEntry.COL_E_YEAR, eyear);
+                            values.put(EventContract.EventEntry.COL_S_TIME, TimeRangeSelecterActivityFragment.startTime);
+                            values.put(EventContract.EventEntry.COL_E_TIME, TimeRangeSelecterActivityFragment.endTime);
+                            Log.e("Blah", "start : " + TimeRangeSelecterActivityFragment.startTime + " end : " + TimeRangeSelecterActivityFragment.endTime);
+                            db.insertWithOnConflict(EventContract.EventEntry.TABLE,
+                                    null,
+                                    values,
+                                    SQLiteDatabase.CONFLICT_REPLACE);
+                            db.close();
+                            dialog.dismiss();
+                        }
+                        if (EventName.getText().toString().equals("")) {
+                            EventName.setError("Provide a name");
+                        }
+                        if (startDate.getText().toString().equals("Select date")) {
+                            startDate.setError("Provide Date");
+                        }
+                        if (startTime.getText().toString().equals("Select time")){
+                            startTime.setError("Provide Time");
+                        }
+                    }
+                });
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                startDate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        new DatePickerDialog(listOfItemsInTemplate.this, date, myCalendar
+//                                .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+//                                myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                        DateRangePickerFragment dateRangePickerFragment = DateRangePickerFragment.newInstance(listOfItemsInTemplate.this, false);
+                        dateRangePickerFragment.show(getFragmentManager(), "datePicker");
+                    }
+                });
+                break;
+            case R.id.add_to_existing:
+                break;
+        }
+    }
+
+    @Override
+    public void onDateRangeSelected(int startDay, int startMonth, int startYear, int endDay, int endMonth, int endYear) {
+//        Log.d("range : ","from: "+startDay+"-"+startMonth+"-"+startYear+" to : "+endDay+"-"+endMonth+"-"+endYear );
+//        Toast.makeText(listOfItemsInTemplate.this, "from: "+startDay+"-"+startMonth+"-"+startYear+" to : "+endDay+"-"+endMonth+"-"+endYear, Toast.LENGTH_SHORT).show();
+        sday = String.valueOf(startDay);
+        smonth = String.valueOf(startMonth);
+        syear = String.valueOf(startYear);
+        eday = String.valueOf(endDay);
+        emonth = String.valueOf(endMonth);
+        eyear = String.valueOf(endYear);
+        startDate.setText(sday + "/" + smonth + "/" + syear + "  -  " + eday + "/" + emonth + "/" + eyear);
     }
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {

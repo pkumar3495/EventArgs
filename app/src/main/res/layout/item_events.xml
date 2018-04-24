@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
 
     <android.support.v7.widget.CardView
@@ -10,33 +10,157 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="8dp"
+        android:padding="16dp"
         app:cardCornerRadius="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_height="match_parent"
+            android:background="@drawable/my_event_background"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/event_title"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/my_event_day"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="00"
+                        android:textColor="#ffffff"
+                        android:textSize="70sp" />
+                    <TextView
+                        android:id="@+id/my_event_month"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="month"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/my_event_year"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="year"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="-"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:textSize="70sp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/my_event_day_end"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="00"
+                        android:textColor="#ffffff"
+                        android:textSize="70sp" />
+
+                    <TextView
+                        android:id="@+id/my_event_month_end"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="month"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:id="@+id/my_event_year_end"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="year"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <ProgressBar
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Hello"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:paddingLeft="10sp"
-                android:paddingRight="10sp"
-                android:layout_weight="1"/>
+                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"/>
 
-            <Button
-                android:id="@+id/task_delete"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/ic_close_black_24dp"
-                android:onClick="deleteEvent"
-                android:layout_weight="0.001"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="#ffffff" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/start_time_text_my_events"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="start time"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/end_time_text_my_events"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="end time"
+                    android:gravity="center"
+                    android:textColor="#ffffff"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/my_event_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:gravity="center"
+                    android:text="Event name"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="#ffffff" />
+
+                <ProgressBar
+                    android:id="@+id/my_event_progress_bar"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"/>
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -82,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         slideView = findViewById(R.id.slideView);
-        dim = findViewById(R.id.dim);
+
+//        slideView = findViewById(R.id.slideView);
+//        dim = findViewById(R.id.dim);
         typesLayout = findViewById(R.id.types_layout);
         menu = findViewById(R.id.menu);
 
@@ -117,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         menu1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getBaseContext(), editEvent.class);
+                Intent intent = new Intent(getBaseContext(), MyEvents.class);
                 startActivity(intent);
             }
         });
@@ -208,8 +210,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (menu.getVisibility() != View.VISIBLE) {
-            slideUp.animateOut();
+//            slideUp.animateOut();
             typesLayout.setBackgroundColor(getResources().getColor(R.color.listBackgroundDefault));
+            slideView.setAnimation(AnimationUtils.loadAnimation(this, R.anim.hide_options_dummy));
+            slideView.setVisibility(View.GONE);
+            menu.setVisibility(View.VISIBLE);
             Arrays.fill(values1, null);
         } else {
             if (exit)
@@ -228,8 +233,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void closebut(View view) {
-        slideUp.animateOut();
+//        slideUp.animateOut();
         typesLayout.setBackgroundColor(getResources().getColor(R.color.listBackgroundDefault));
+        slideView.setAnimation(AnimationUtils.loadAnimation(this, R.anim.hide_options_dummy));
+        slideView.setVisibility(View.GONE);
+        menu.setVisibility(View.VISIBLE);
         Arrays.fill(values1, null);
     }
 }

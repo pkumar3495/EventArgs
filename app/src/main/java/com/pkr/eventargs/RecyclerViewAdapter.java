@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.pkr.eventargs.MainActivity.adapter;
+import static com.pkr.eventargs.MainActivity.slideView;
 import static com.pkr.eventargs.MainActivity.typeList;
 import static com.pkr.eventargs.MainActivity.values1;
 
@@ -43,6 +44,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private View view;
     private ViewHolder viewHolder;
     private int lastPosition = -1;
+
 
     public RecyclerViewAdapter (Context context, ArrayList<String> category, int[] categoryImage){
         this.context = context;
@@ -81,23 +83,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             textView = itemView.findViewById(R.id.single_item_text);
             image = itemView.findViewById(R.id.category_image);
 
-            MainActivity.slideUp = new SlideUp(MainActivity.slideView);
-            MainActivity.slideUp.hideImmediately();
+//            MainActivity.slideUp = new SlideUp(MainActivity.slideView);
+//            MainActivity.slideUp.hideImmediately();
+//
+//            MainActivity.slideUp.setSlideListener(new SlideUp.SlideListener() {
+//                @Override
+//                public void onSlideDown(float v) {
+//                    MainActivity.dim.setAlpha(1 - (v / 100));
+//                }
+//
+//                @Override
+//                public void onVisibilityChanged(int i) {
+//                    if (i == View.GONE) {
+//                        MainActivity.menu.setVisibility(View.VISIBLE);
+//                        MainActivity.typesLayout.setBackgroundColor(itemView.getResources().getColor(R.color.listBackgroundDefault));
+//                    }
+//                }
+//            });
 
-            MainActivity.slideUp.setSlideListener(new SlideUp.SlideListener() {
-                @Override
-                public void onSlideDown(float v) {
-                    MainActivity.dim.setAlpha(1 - (v / 100));
-                }
 
-                @Override
-                public void onVisibilityChanged(int i) {
-                    if (i == View.GONE) {
-                        MainActivity.menu.setVisibility(View.VISIBLE);
-                        MainActivity.typesLayout.setBackgroundColor(itemView.getResources().getColor(R.color.listBackgroundDefault));
-                    }
-                }
-            });
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -109,6 +113,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             case "Tech" : values1 = new String[] {"Workshop", "Session", "Ted Talks", "Chutiyapa meeting"};break;
                             case "Trips" : values1 = new String[] {"Picnic", "Road trip", "Site seeing", "Bird watching", "Chai pine", "Badminton khelne", "Road trip", "Site seeing", "Bird watching", "Chai pine", "Badminton khelne", "Road trip", "Site seeing", "Bird watching", "Chai pine", "Badminton khelne"};break;
                             case "Cultural" : values1 = new String[] {"Cultura", "Idk cultural", "something cultural"};break;
+                            case "Something" : values1 = new String[] {"Cultura", "Idk cultural", "something cultural"};break;
+                            case "Educational" : values1 = new String[] {"Cultura", "Idk cultural", "something cultural"};break;
+                            case "Live the design" : values1 = new String[] {"Cultura", "Idk cultural", "something cultural"};break;
+                            case "What's up yo" : values1 = new String[] {"Cultura", "Idk cultural", "something cultural"};break;
                         }
 
                         adapter = new ArrayAdapter<String>(itemView.getContext(), R.layout.sub_type_item, R.id.type_single, values1);
@@ -128,7 +136,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
     public void finishTypeCreation (View v) {
-        MainActivity.slideUp.animateIn();
+//        MainActivity.slideUp.animateIn();
+        slideView.setVisibility(View.VISIBLE);
+        slideView.setAnimation(AnimationUtils.loadAnimation(context, R.anim.show_options_dummy));
         MainActivity.menu.setVisibility(View.GONE);
         MainActivity.typesLayout.setBackgroundColor(v.getResources().getColor(R.color.listBackground));
     }

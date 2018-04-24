@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="#f2f9fd"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingTop="16dp">
+
+    <EditText
+        android:id="@+id/event_name_in_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/edit_text_back"
+        android:hint="Name of the event"
+        android:maxLines="1"
+        android:gravity="center"
+        android:padding="8dp" />
+
+
+    <TextView
+        android:id="@+id/start_date"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:background="@drawable/date_background"
+        android:gravity="center"
+        android:text="Select date" />
+
+
+    <!--<TextView-->
+        <!--android:id="@+id/start_time"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:background="@drawable/date_background"-->
+        <!--android:gravity="center"-->
+        <!--android:text="Select time" />-->
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools" android:id="@+id/fragment"
+        android:name="com.pkr.eventargs.TimeRangeSelecterActivityFragment"
+        tools:layout="@layout/fragment_time_range_selecter" android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/create_option_cancel_but"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:text="Cancel"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:id="@+id/create_option_add_but"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:gravity="center"
+            android:text="Add"
+            android:textColor="#ffffff" />
+    </LinearLayout>
+
+</LinearLayout>

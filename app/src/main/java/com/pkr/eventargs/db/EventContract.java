@@ -14,7 +14,14 @@ public class EventContract {
     public class EventEntry implements BaseColumns{
         public static final String TABLE = "eventsList";
         public static final String COL_EVENT_TITLE = "event";
-        public static final String COL_DATE = "date";
+        public static final String COL_S_DAY = "start_day";
+        public static final String COL_S_MONTH = "start_month";
+        public static final String COL_S_YEAR = "start_year";
+        public static final String COL_E_DAY = "end_day";
+        public static final String COL_E_MONTH = "end_month";
+        public static final String COL_E_YEAR = "end_year";
+        public static final String COL_S_TIME = "start_time";
+        public static final String COL_E_TIME = "end_time";
     }
 
 }
